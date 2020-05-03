@@ -1,0 +1,16 @@
+{
+    "menu": [
+        {
+            "url": "/",
+            "name": "Dashboard",
+            "slug": "dashboard",
+            "badgeClass": "badge badge-warning badge-pill float-right",
+            "icon": "feather icon-home"
+        },
+        {
+            "url": "/nguoi-dung",
+            "name": "nguoi_dung",
+            "icon": "feather icon-zap"
+        }
+    ]
+}
