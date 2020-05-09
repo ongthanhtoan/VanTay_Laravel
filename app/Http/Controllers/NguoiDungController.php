@@ -16,25 +16,21 @@ class NguoiDungController extends Controller
      */
     public function index()
     {
-        $json = file_get_contents(storage_path('products-export.json'));
-        $objs = json_decode($json,true);
-
-        return view('/pages/nguoi-dung', [
-            'products' => $objs['products']
+        return view('/pages/trang-chu', [
         ]); 
     }
     public function saveImages(){
         $time = request('name');
         $file = request('file');
         $image = str_replace('\\','',$file);
-        $imageName = $time. '.png';
+        $imageName = $time. '.tif';
         Storage::disk('public')->put($imageName, base64_decode($image));
         return response()->json([
             'data' => 'OK',
         ],200);
     }
     public function getImages(){
-        $time = request('name').'.png';
+        $time = request('name').'.tif';
         $path = public_path('storage\\'.$time);
         if (File::exists($path)) {
             return response()->json([
@@ -55,11 +51,23 @@ class NguoiDungController extends Controller
             ]);
         }else{
             return response()->json([
-                "code" => 200,
+                "code" => 404,
                 "id_nguoi_dung" => '',
                 "message" => "Vân tay không tồn tại trong hệ thống"
             ]);
         }
+    }
+    public function checkVanTay_KhongNgon(Request $request){
+        $urlVanTay = $request->url;
+        return response()->json([
+            "code" => 404,
+            "message" => "Không tìm thấy thông tin vân tay trong hệ thống!"
+        ]);
+        // return response()->json([
+        //     "code" => 200,
+        //     "id_nguoi_dung" => 34516,
+        //     "message" => "Load dữ liệu thành công!"
+        // ]);
     }
     public function thongTinNguoiDung(Request $request){
         $data = json_decode($request->data_kh);
@@ -77,5 +85,17 @@ class NguoiDungController extends Controller
             'arrCaNhan' => $arrCaNhan,
             'arrChung' => $arrChung
         ]); 
+    }
+
+    public function timVanTay(Request $request){
+        return response()->json([
+            "code" => 404,
+            "message" => "Không tìm thấy thông tin vân tay trong hệ thống!"
+        ]);
+        // return response()->json([
+        //     "code" => 200,
+        //     "id_nguoi_dung" => 34516,
+        //     "message" => "Load dữ liệu thành công!"
+        // ]);
     }
 }

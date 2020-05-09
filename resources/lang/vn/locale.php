@@ -2,7 +2,7 @@
 
 return [
     "Dashboard" => "Dashboard",
-    "nguoi_dung" => "Người dùng",
+    "trang_chu" => "Trang chủ",
     "2 Columns" => "2 Columns",
     "Fixed Navbar" => "Fixed Navbar",
     "Floating Navbar" => "Floating Navbar",

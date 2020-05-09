@@ -1,10 +1,11 @@
 
 @extends('layouts/contentLayoutMaster')
 
-@section('title', 'Người dùng')
+@section('title', 'Trang chủ')
 
 @section('vendor-style')
         {{-- vendor files --}}
+        <link rel="stylesheet" href="{{ asset(mix('css/pages/app-user.css')) }}">
         <link rel="stylesheet" href="{{ asset(mix('vendors/css/tables/datatable/datatables.min.css')) }}">
         <link rel="stylesheet" href="{{ asset(mix('vendors/css/tables/datatable/extensions/dataTables.checkboxes.css')) }}">
         <link rel="stylesheet" href="{{ asset(mix('vendors/css/extensions/toastr.css')) }}">
@@ -18,86 +19,54 @@
 @endsection
 
 @section('content')
+<iframe id="iframe" src="" style="display:none;"></iframe>
 {{-- Data list view starts --}}
 <section id="data-list-view" class="data-list-view-header">
-    <div class="action-btns d-none">
-      <div class="btn-dropdown mr-1 mb-1">
-        <div class="btn-group dropdown actions-dropodown">
-          <button type="button" class="btn btn-white px-1 py-1 dropdown-toggle waves-effect waves-light"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Actions
-          </button>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="#"><i class="feather icon-trash"></i>Delete</a>
-            <a class="dropdown-item" href="#"><i class="feather icon-archive"></i>Archive</a>
-            <a class="dropdown-item" href="#"><i class="feather icon-file"></i>Print</a>
-            <a class="dropdown-item" href="#"><i class="feather icon-save"></i>Another Action</a>
+  <section class="page-users-view">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            {{-- <div class="card-title">Ảnh vân tay</div> --}}
+            <div class="row">
+              <div class="col-sm-3">
+                <img class="card-img-top img-fluid img-van-tay" src="../storage/admin_1587795077314.png" alt="" height="50%">
+              </div>
+              <div class="col-sm-9" id="info">
+                
+              </div>
+              <div class="col-sm-9" id="addNew" style="display:none;">
+                <form id="frmAddNew" action="">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="txtCMND">Nhập CMND:</label>
+                        <input id="txtCMND" name="txtCMND" type="text" class="form-control" placeholder="Nhập số chứng minh nhân dân">
+                      </div>
+                    </div>
+                    {{-- <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="txtIDKhachHang">ID Khách hàng:</label>
+                        <input id="txtIDKhachHang" name="txtIDKhachHang" type="text" class="form-control" disabled>
+                      </div>
+                    </div> --}}
+                    <div class="col-md-12 text-right">
+                      <input onclick="timVanTay()" id="btnTim" type="button" class="btn btn-primary btnTim" value="Tìm">
+                      {{-- <input id="btnReset" type="button" class="btn btn-danger" value="Reset" onclick="reloadVanTay()"> --}}
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-    {{-- DataTable starts --}}
-    <div class="table-responsive">
-      <table class="table data-list-view">
-        <thead>
-          <tr>
-            <th></th>
-            <th>NAME</th>
-            <th>CATEGORY</th>
-            <th>POPULARITY</th>
-            <th>ORDER STATUS</th>
-            <th>PRICE</th>
-            <th>ACTION</th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach ($products as $product)
-            @if($product["order_status"] === 'delivered')
-              <?php $color = "success" ?>
-            @elseif($product["order_status"] === 'pending')
-              <?php $color = "primary" ?>
-            @elseif($product["order_status"] === 'on hold')
-              <?php $color = "warning" ?>
-            @elseif($product["order_status"] === 'canceled')
-              <?php $color = "danger" ?>
-            @endif
-            <?php
-              $arr = array('success', 'primary', 'info', 'warning', 'danger');
-            ?>
-
-            <tr>
-              <td></td>
-              <td class="product-name">{{ $product["name"] }}</td>
-              <td class="product-category">{{ $product["category"] }}</td>
-              <td>
-                <div class="progress progress-bar-{{ $arr[array_rand($arr)] }}">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="40" aria-valuemax="100"
-                    style="width:{{ $product["popularity"] }}%"></div>
-                </div>
-              </td>
-              <td>
-                <div class="chip chip-{{$color}}">
-                  <div class="chip-body">
-                    <div class="chip-text">{{ $product["order_status"]}}</div>
-                  </div>
-                </div>
-              </td>
-              <td class="product-price">{{ $product["price"] }}</td>
-              <td class="product-action">
-                <span class="action-edit"><i class="feather icon-edit"></i></span>
-                <span class="action-delete"><i class="feather icon-trash"></i></span>
-              </td>
-            </tr>
-          @endforeach
-        </tbody>
-      </table>
-    </div>
-    {{-- DataTable ends --}}
+  </section>
 
     {{-- add new sidebar starts --}}
     <div class="add-new-data-sidebar">
-      <div class="overlay-bg"></div>
+      <div class="overlay-bg btnHuy"></div>
       <div class="add-new-data">
         <form id="frmMain" action="/nguoi-dung/thong-tin-nguoi-dung" method="POST" target="_blank">
           @csrf
@@ -107,20 +76,16 @@
               <h4 class="text-uppercase">Thông tin vân tay</h4>
             </div>
             <div class="hide-data-sidebar">
-              <i class="feather icon-x"></i>
+              <i class="feather icon-x btnHuy"></i>
             </div>
           </div>
           <div class="data-items pb-3">
             <div class="data-fields px-2 mt-1">
               <div class="row">
-                  <div class="col-sm-12 data-field-col">
+                  <div class="col-sm-12 data-field-col text-center">
                       <input type="hidden" name="img" id="input-url" value="">
-                      <img class="card-img-top img-fluid" id="img-van-tay" src="" alt="" height="50%">
+                      <img class="img-fluid img-van-tay" src="" alt="" style="height: 400px;">
                   </div>
-                <div class="col-sm-12 data-field-col">
-                  <label for="data-name">Chứng minh nhân dân</label>
-                  <input type="text" class="form-control" name="cmnd" id="cmnd" required data-validation-required-message="Vui lòng nhập chứng minh nhân dân!">
-                </div>
                 <div class="col-sm-12 data-field-col">
                   <label for="data-category"> Ngón tay </label>
                   <select class="form-control" name="slNgonTay" id="slNgonTay">
@@ -168,7 +133,7 @@
               <input id="btnKiemTra" onclick="checkVanTay()" type="button" class="btn btn-primary" value="Kiểm tra">
             </div>
             <div class="cancel-data-btn">
-              <input id="btnHuy" type="button" class="btn btn-outline-danger" value="Hủy">
+              <input id="btnHuy" type="button" class="btn btn-outline-danger btnHuy" value="Hủy">
             </div>
           </div>
         </form>
@@ -194,29 +159,63 @@
         <script src="{{ asset(mix('js/scripts/ui/data-list-view.js')) }}"></script>
         <script src="{{ asset(mix('js/scripts/extensions/toastr.js')) }}"></script>
         <script src="{{ asset(mix('js/scripts/forms/validation/form-validation.js')) }}"></script>
+        <script src="{{ asset(mix('js/scripts/pages/app-user.js')) }}"></script>
         <script>
             var key = "";
             $(document).ready(function(){
-              $("#cmnd").parent().hide();
+              $("#addNew").hide();
                 const today = new Date();
                 const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
                 const arr = userInfo.email.split("@");
                 const email = arr[0];
                 key = email+'_'+today.getTime();
-                window.open("ABC:,"+key,'_self');
+                $("#iframe").attr('src',"AB:,"+key+"");
                 getImage();
-                $("#btnHuy").click(function(){
+                $(".btnHuy").click(function(){
                   setTimeout(function(){
                       const today = new Date();
                       const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
                       const arr = userInfo.email.split("@");
                       const email = arr[0];
                       key = email+'_'+today.getTime();
-                      window.open("ABC:,"+key,'_self');
+                      $("#iframe").attr('src',"AB:,"+key+"");
                       getImage();
                   }.bind(this),1000);
-                }); 
+                });
             });
+            function timVanTay(){
+              const token = sessionStorage.getItem('token');
+              const cmnd = $("#txtCMND").val();
+              $.ajax({
+                  url:"http://dotary.miennam24h.vn/api/chi-tiet-duong-su",
+                  method:"POST",
+                  dataType: "json",
+                  data:{
+                    cmnd: cmnd,
+                    token: token
+                  },
+                  success:function(response){
+                      if(response.data != ""){
+                        createFormThongTin(response.data,true);
+                        const today = new Date();
+                        const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+                        const arr = userInfo.email.split("@");
+                        const email = arr[0];
+                        key = email+'_'+today.getTime();
+                        $("#iframe").attr('src',"AB:,"+key+"");
+                        getImage();
+                      }else{
+                        toastr.warning(response.message);
+                        setTimeout(function(){
+                          document.frmMain.submit();
+                        },1000);
+                      }
+                  },
+                  error:function(response){
+                    toastr.warning(response.message);
+                  },
+              });
+            }
             function getImage(){
                 const name = key;
                 const countDown = setInterval(function(){
@@ -227,31 +226,54 @@
                         data:{name: name},
                         success:function(response){
                             if(response.filename){
-                                showPopup(response.filename);
                                 clearInterval(countDown);
+                                showPopup(response.filename);
+                                
                             }
                         }
                     });
                 }.bind(this), 3000);
             }
             function showPopup(url){
-                $("#img-van-tay").attr('src',"../storage/"+url);
-                $("#input-url").val(url);
-                $(".add-new-data").addClass("show")
-                $(".overlay-bg").addClass("show")
-                $("#slNgonTay").prop("selectedIndex", 0)
+              const ok = false;
+              $.ajax({
+                  url:"/nguoi-dung/check-van-tay-khong-ngon",
+                  method:"POST",
+                  dataType: "json",
+                  data:{
+                    url: url
+                  },
+                  success:function(response){
+                      if(response.code == 200){
+                        getThongTinNguoiDung(response.id_nguoi_dung);
+                        const today = new Date();
+                        const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+                        const arr = userInfo.email.split("@");
+                        const email = arr[0];
+                        key = email+'_'+today.getTime();
+                        $("#iframe").attr('src',"AB:,"+key+"");
+                        getImage();
+                        ok = true;
+                      }else if(response.code == 404){
+                        toastr.warning(response.message);
+                        $(".add-new-data").addClass("show");
+                        $(".overlay-bg").addClass("show");
+                      }
+                  },
+                  error:function(response){
+                    toastr.warning(response.message);
+                  },
+              });
+              $(".img-van-tay").attr('src',"../storage/"+url);
+              $("#input-url").val(url);
+              if(ok){
+                $(".add-new-data").addClass("show");
+                $(".overlay-bg").addClass("show");
+                $("#slNgonTay").prop("selectedIndex", 0);
+              }
             }
             function reloadVanTay(){
               location.reload();
-                // setTimeout(function(){
-                //     const today = new Date();
-                //     const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
-                //     const arr = userInfo.email.split("@");
-                //     const email = arr[0];
-                //     key = email+'_'+today.getTime();
-                //     window.open("ABC:,"+key,'_self');
-                //     getImage();
-                // }.bind(this),1000);
             }
             function checkVanTay(){
               const URLVanTay = $("#input-url").val();
@@ -267,17 +289,25 @@
                     ben_tay: benTay
                   },
                   success:function(response){
-                      if(response.id_nguoi_dung != ""){
+                      if(response.code == 200){
                         getThongTinNguoiDung(response.id_nguoi_dung);
-                      }else{
-                        toastr.warning(response.message);
-                        $("#cmnd").parent().show();
+                      }else if(response.code == 404){
+                        $(".add-new-data").removeClass("show")
+                        $(".overlay-bg").removeClass("show")
+                        $("#info").html($("#addNew").html());
                       }
                   },
                   error:function(response){
-                      // toastr.warning(response.message);
+                    toastr.warning(response.message);
                   },
               });
+              const today = new Date();
+              const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+              const arr = userInfo.email.split("@");
+              const email = arr[0];
+              key = email+'_'+today.getTime();
+              $("#iframe").attr('src',"AB:,"+key+"");
+              getImage();
             }
             function getThongTinNguoiDung(id){
               const token = sessionStorage.getItem('token');
@@ -290,13 +320,48 @@
                     token: token
                   },
                   success:function(response){
-                      $("#data_kh").val(JSON.stringify(response));
-                      $("#frmMain").submit();
+                      createFormThongTin(response.data);
+                      $(".add-new-data").removeClass("show")
+                      $(".overlay-bg").removeClass("show")
                   },
                   error:function(response){
-                      // toastr.warning(response.message);
+                    toastr.warning(response.message);
                   },
               });
+            }
+            function createFormThongTin(data,save = false){
+              var html = '';
+              html = '<div class="card"><div class="card-body"><div class="card-title">Thông tin cá nhân</div><div class="row">';
+              $.each(data,function(index,value){
+                html += '<div class="col-sm-6 col-12">';
+                html += '<table>';
+                if(value.tm_loai == "file" && (value.tm_keywords == 'hinh-giay-tuy-than-mt' || value.tm_keywords == 'hinh-giay-tuy-than-ms')){
+                  html += '<tr>';
+                  html += '<td class="font-weight-bold">'+value.tm_nhan+':</td>';
+                  html += '</tr>';
+                  html += '<tr>';
+                  html += '<td class="product-img"><img class="w-50 h-50" src="../storage/mongquynh_1589028821492.tif" alt=""></td>';
+                  html += '</tr>';
+                }else if(value.tm_keywords != 'van-tay-phai' && value.tm_keywords != 'van-tay-trai'){
+                  html += '<td class="font-weight-bold">'+value.tm_nhan+':</td>';
+                  html += '<td>'+value.kh_giatri+'</td>';
+                }
+                html += '</tr>';
+                html += '</table>';
+                html += '</div>';
+              });
+              html += '</div></div>';
+              if(save){
+                html += "<div class='row'>";
+                html += '<div class="col-md-12 text-right"><input onclick="save()" id="btnSave" type="button" class="btn btn-primary btnTim" value="Lưu"></div>';
+                html += "<div>";
+              }
+              html += '</div>';
+              // console.log(html)
+              $("#info").html(html);
+            }
+            function save(){
+              alert(1);
             }
         </script>
 @endsection

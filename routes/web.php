@@ -22,10 +22,12 @@ Route::get('/', 'DashboardController@dashboardAnalytics');
 Route::get('/dashboard-analytics', 'DashboardController@dashboardAnalytics');
 
 //Route Người dùng
-Route::get('/nguoi-dung', 'NguoiDungController@index');
+Route::get('/trang-chu', 'NguoiDungController@index');
 Route::post('nguoi-dung/save-images', 'NguoiDungController@saveImages');
 Route::post('nguoi-dung/get-images','NguoiDungController@getImages');
 Route::post('nguoi-dung/check-van-tay','NguoiDungController@checkVanTay');
+Route::post('nguoi-dung/check-van-tay-khong-ngon','NguoiDungController@checkVanTay_KhongNgon');
+Route::post('nguoi-dung/tim-van-tay','NguoiDungController@timVanTay');
 Route::post('nguoi-dung/thong-tin-nguoi-dung','NguoiDungController@thongTinNguoiDung');
 
 // locale Route

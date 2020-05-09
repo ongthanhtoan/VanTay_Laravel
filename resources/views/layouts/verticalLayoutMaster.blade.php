@@ -50,7 +50,7 @@ $configData = Helper::applClasses();
 
   </div>
   <!-- End: Content-->
-
+  @include('pages/customizer')
   <div class="sidenav-overlay"></div>
   <div class="drag-target"></div>
 

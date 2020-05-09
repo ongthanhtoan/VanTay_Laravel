@@ -1,15 +1,8 @@
 {
     "menu": [
         {
-            "url": "/",
-            "name": "Dashboard",
-            "slug": "dashboard",
-            "badgeClass": "badge badge-warning badge-pill float-right",
-            "icon": "feather icon-home"
-        },
-        {
-            "url": "/nguoi-dung",
-            "name": "nguoi_dung",
+            "url": "/trang-chu",
+            "name": "trang_chu",
             "icon": "feather icon-zap"
         }
     ]
